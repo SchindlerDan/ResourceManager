@@ -58,7 +58,7 @@ public class program {
 				
 				line = br.readLine();
 				do{
-					System.out.println("successful operations is: " + successfulOperations);
+					//System.out.println("successful operations is: " + successfulOperations);
 						
 					if(successfulOperations < 1) {
 						if(line == null) {
@@ -110,7 +110,7 @@ public class program {
 					totalDesired = 0;
 					for(Process process: processes) {
 						successfulOperations += process.useResources();
-						
+						successfulOperations += process.lateRelease();
 						totalDesired += process.getDesiredSize();
 						totalUsed += process.getUsedSize();
 					}

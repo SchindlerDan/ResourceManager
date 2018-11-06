@@ -4,11 +4,13 @@ public class Process {
 	String name;
 	ArrayList<Resource> used;
 	ArrayList<Resource> desired;
+	ArrayList<Resource> release;
 	
 	public Process(String pName) {
 		name = pName;
 		used = new ArrayList<>();
 		desired = new ArrayList<>();
+		release = new ArrayList<>();
 		
 	}
 	
@@ -20,7 +22,9 @@ public class Process {
 				System.out.println("Released resource " + resource.getName());
 				return 1;
 			}
-		}
+		} 
+		//System.out.println("Can not release " + resource.getName() + " I do not have that resource yet");
+		release.add(resource);
 		return 0;
 	}
 	
@@ -57,6 +61,19 @@ public class Process {
 		return name;
 	}
 
+
+	public int lateRelease() {
+		int totalSuccess = 0;
+		for(Resource resource: release) {
+			int success = 0;
+			success = releaseResource(resource);
+			if( 0 < success) {
+				release.remove(resource);
+				totalSuccess += success;
+			}
+		}
+		return totalSuccess;
+	}
 
 
 }
