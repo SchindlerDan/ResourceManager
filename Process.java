@@ -15,6 +15,7 @@ public class Process {
 	public int releaseResource(Resource resource) {
 		for(int i = 0; i < used.size(); i++) {
 			if(used.get(i) == resource) {
+				used.get(i).freeResource();
 				used.remove(i);
 				System.out.println("Released resource " + resource.getName());
 				return 1;
@@ -23,8 +24,9 @@ public class Process {
 		return 0;
 	}
 	
-	public void addDesired(Resource resource) {
+	public int addDesired(Resource resource) {
 		desired.add(resource);
+		return 1;
 	}
 	
 	public int useResources() {
@@ -38,7 +40,7 @@ public class Process {
 				newUses +=1;
 			}
 		}
-		System.out.println(name + " using " + newUses + "more resources");
+		//System.out.println(name + " using " + newUses + "more resources");
 		return newUses;
 	}
 	
