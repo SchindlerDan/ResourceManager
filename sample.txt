@@ -1,0 +1,267 @@
+Please enter '1' or '0' for if we should force simulation to continue despite potential deadlock
+Please note that the simulation will still end if no successful operations can be completed
+0
+Please enter the desired speed per simulation step in ms. Ex value is 1000
+1000
+Please enter the name of the file
+input3a.txt
+Creating process: p0
+Creating process: p1
+Creating process: p2
+Creating Resource: r0
+Creating Resource: r1
+Creating Resource: r2
+Creating Resource: r3
+Creating Resource: r4
+-------------------------------------------
+I am p0
+I own{ }
+I'm trying to get{ }
+
+I am p1
+I own{ }
+I'm trying to get{ }
+
+I am p2
+I own{ }
+I'm trying to get{ }
+
+Free Resources are: 
+r0
+r1
+r2
+r3
+r4
+-------------------------------------------
+p0 Adding desired r1
+p0 is now using resource r1
+-------------------------------------------
+I am p0
+I own{ r1 }
+I'm trying to get{ }
+
+I am p1
+I own{ }
+I'm trying to get{ }
+
+I am p2
+I own{ }
+I'm trying to get{ }
+
+Free Resources are: 
+r0
+r2
+r3
+r4
+-------------------------------------------
+p0 Adding desired r2
+p0 is now using resource r2
+-------------------------------------------
+I am p0
+I own{ r1 r2 }
+I'm trying to get{ }
+
+I am p1
+I own{ }
+I'm trying to get{ }
+
+I am p2
+I own{ }
+I'm trying to get{ }
+
+Free Resources are: 
+r0
+r3
+r4
+-------------------------------------------
+p1 Adding desired r3
+p1 is now using resource r3
+-------------------------------------------
+I am p0
+I own{ r1 r2 }
+I'm trying to get{ }
+
+I am p1
+I own{ r3 }
+I'm trying to get{ }
+
+I am p2
+I own{ }
+I'm trying to get{ }
+
+Free Resources are: 
+r0
+r4
+-------------------------------------------
+p1 Adding desired r4
+p1 is now using resource r4
+-------------------------------------------
+I am p0
+I own{ r1 r2 }
+I'm trying to get{ }
+
+I am p1
+I own{ r3 r4 }
+I'm trying to get{ }
+
+I am p2
+I own{ }
+I'm trying to get{ }
+
+Free Resources are: 
+r0
+-------------------------------------------
+p2 Adding desired r2
+-------------------------------------------
+I am p0
+I own{ r1 r2 }
+I'm trying to get{ }
+
+I am p1
+I own{ r3 r4 }
+I'm trying to get{ }
+
+I am p2
+I own{ }
+I'm trying to get{ r2 }
+
+Free Resources are: 
+r0
+-------------------------------------------
+p0 Adding desired r0
+p0 is now using resource r0
+-------------------------------------------
+I am p0
+I own{ r1 r2 r0 }
+I'm trying to get{ }
+
+I am p1
+I own{ r3 r4 }
+I'm trying to get{ }
+
+I am p2
+I own{ }
+I'm trying to get{ r2 }
+
+Free Resources are: 
+-------------------------------------------
+p1 Adding desired r0
+-------------------------------------------
+I am p0
+I own{ r1 r2 r0 }
+I'm trying to get{ }
+
+I am p1
+I own{ r3 r4 }
+I'm trying to get{ r0 }
+
+I am p2
+I own{ }
+I'm trying to get{ r2 }
+
+Free Resources are: 
+-------------------------------------------
+p0 releasing r0
+Released resource r0
+p1 is now using resource r0
+-------------------------------------------
+I am p0
+I own{ r1 r2 }
+I'm trying to get{ }
+
+I am p1
+I own{ r3 r4 r0 }
+I'm trying to get{ }
+
+I am p2
+I own{ }
+I'm trying to get{ r2 }
+
+Free Resources are: 
+-------------------------------------------
+p0 releasing r1
+Released resource r1
+-------------------------------------------
+I am p0
+I own{ r2 }
+I'm trying to get{ }
+
+I am p1
+I own{ r3 r4 r0 }
+I'm trying to get{ }
+
+I am p2
+I own{ }
+I'm trying to get{ r2 }
+
+Free Resources are: 
+r1
+-------------------------------------------
+p0 releasing r2
+Released resource r2
+p2 is now using resource r2
+-------------------------------------------
+I am p0
+I own{ }
+I'm trying to get{ }
+
+I am p1
+I own{ r3 r4 r0 }
+I'm trying to get{ }
+
+I am p2
+I own{ r2 }
+I'm trying to get{ }
+
+Free Resources are: 
+r1
+-------------------------------------------
+p1 Adding desired r1
+p1 is now using resource r1
+-------------------------------------------
+I am p0
+I own{ }
+I'm trying to get{ }
+
+I am p1
+I own{ r3 r4 r0 r1 }
+I'm trying to get{ }
+
+I am p2
+I own{ r2 }
+I'm trying to get{ }
+
+Free Resources are: 
+-------------------------------------------
+p2 Adding desired r3
+-------------------------------------------
+I am p0
+I own{ }
+I'm trying to get{ }
+
+I am p1
+I own{ r3 r4 r0 r1 }
+I'm trying to get{ }
+
+I am p2
+I own{ r2 }
+I'm trying to get{ r3 }
+
+Free Resources are: 
+-------------------------------------------
+-------------------------------------------
+I am p0
+I own{ }
+I'm trying to get{ }
+
+I am p1
+I own{ r3 r4 r0 r1 }
+I'm trying to get{ }
+
+I am p2
+I own{ r2 }
+I'm trying to get{ r3 }
+
+Free Resources are: 
+-------------------------------------------
+End of log. Total requests: 9 Total releases: 3
