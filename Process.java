@@ -120,7 +120,7 @@ public class Process {
 
 
 	/**
-	 * Allows processes to release resources after the simulation says to. 
+	 * Allows processes to release resources after the simulation says to. Is never used in current version of program.
 	 * @return int returns number of successful late releases
 	 */
 	public int lateRelease() {

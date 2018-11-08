@@ -21,11 +21,6 @@ public class program {
 			Scanner scn = new Scanner(System.in);
 			
 			/**
-			 * if deadlock is detected, continue with simulation anyway
-			 */
-			int ignorePotentialIssues;
-			
-			/**
 			 * Amount of time simulation should wait between steps. Smaller number means faster simulation. 
 			 */
 			int simulationSpeed;
@@ -81,11 +76,6 @@ public class program {
 			 */
 			String line = "";
 
-			
-			System.out.println("Please enter '1' or '0' for if we should force simulation to continue despite potential deadlock"
-					+ "\nPlease note that the simulation will still end if no successful operations can be completed");
-			ignorePotentialIssues = scn.nextInt();
-			
 			System.out.println("Please enter the desired speed per simulation step in ms. Ex value is 1000");
 			simulationSpeed = scn.nextInt();
 			
@@ -146,7 +136,7 @@ public class program {
 						if(line == null) {
 							System.out.println("End of log. Total requests: " + totalRequests + " Total releases: " + totalReleases);
 						}else {
-							System.out.println("Total Deadlock detected. Shutting down.");
+							System.out.println("No successful Operations detected. Shutting down.");
 						}
 						scn.close();
 						System.exit(1);
@@ -185,7 +175,12 @@ public class program {
 							//requests.add(new Pair(key, value));
 						}else if(parsedLine[1].equals("releases")) {
 							System.out.println(key.getName() + " releasing " + value.getName());
-							successfulOperations += key.releaseResource(value);
+							int tmp = key.releaseResource(value);
+							if(tmp < 1) {
+								System.out.println("I couldn't release resource " + value.getName() + ". I don't own it.");
+							}else {
+								successfulOperations += tmp;
+							}
 							totalReleases += 1;
 							//releases.add(new Pair(key, value));
 						}else {
@@ -203,40 +198,25 @@ public class program {
 					 * release earlier for some reason. 
 					 */
 					for(Process process: processes) {
-						for(Process process2: processes){
-							boolean potentialFlagOne = false;
-							boolean potentialFlagTwo = false;
-							
-							for(Resource res: process.getUsed()){
-								if(process2.getDesired().contains(res) && process != process2){
-									potentialFlagOne = true;
-								}
-							}
-							
-							for(Resource res: process.getDesired()){
-								if(process2.getUsed().contains(res) && process != process2){
-									potentialFlagTwo = true;
-								}
-							}
-							if(potentialFlagOne && potentialFlagTwo && ignorePotentialIssues == 1){
-								System.out.println("WARNING! POTENTIAL DEADLOCK DISCOVERED!");
-								System.out.println("Conflict of interest between processes: " + process.getName() + " and " + process2.getName());
-								System.out.println("Continuing simulation...");
-							}else if(potentialFlagOne && potentialFlagTwo){
-								System.out.println("WARNING! POTENTIAL DEADLOCK DISCOVERED!");
-								System.out.println("Conflict of interest between processes: " + process.getName() + " and " + process2.getName());
-								System.out.println("Closing simulation...");
-								scn.close();
-								System.exit(1);
-							}
 						
-						}
 						
 						
 						successfulOperations += process.useResources();
-						successfulOperations += process.lateRelease();
 						totalDesired += process.getDesiredSize();
 						totalUsed += process.getUsedSize();
+						
+						if(process.getDesiredSize() > 0) {
+							ArrayList<Process> deadLockPath = new ArrayList<Process>();
+							deadLockPath = checkDeadlock(new ArrayList<Process>(), process, numProcesses);
+							if(deadLockPath.size() > 0) {
+								System.out.println("Deadlock detected due to following processes:");
+								for(Process proc: deadLockPath) {
+									System.out.println(proc.getName());
+								}
+								System.out.println("Closing simulation");
+								System.exit(0);
+							}
+						}
 					}
 					
 					TextDisplay.display(resources, processes);
@@ -261,5 +241,40 @@ public class program {
 	
 	
 			
+		}
+		
+		
+		
+		public static ArrayList<Process> checkDeadlock(ArrayList<Process> path, Process current, int totalProcesses){
+			ArrayList<Process> emptyPath = new ArrayList<>();
+			ArrayList<Process> tempPath = new ArrayList<>();
+			
+			//Following print statements intentionally left commented out. Put them back in for diagnostic information on the deadlock check
+			/*
+			System.out.println("initialized emptyPath, See: " + emptyPath);
+			System.out.println("initialized tempPath, See: " + tempPath);
+			System.out.print("path is currently: " );
+			
+			for(Process proc: path) {
+				System.out.print(proc.getName() + " ");
 			}
+			
+			System.out.println("current is: " + current.getName());
+			*/
+			if( path.size() > 1 && path.get(0) == current) {
+				return path;
+			}else if((path.size() >= totalProcesses) || (current.getDesiredSize() < 1)) {
+				return emptyPath;
+			}
+			path.add(current);
+			for(Resource res: current.getDesired()) {
+				tempPath = checkDeadlock(path, res.getUser(), totalProcesses);
+				if(tempPath.size() > 0 ) {
+					return tempPath;
+				}
+			}
+			return emptyPath;
+			
+			
+		}
 }
