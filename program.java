@@ -210,10 +210,12 @@ public class program {
 							ArrayList<Process> deadLockPath = new ArrayList<Process>();
 							deadLockPath = checkDeadlock(new ArrayList<Process>(), process, numProcesses);
 							if(deadLockPath.size() > 0) {
+								TextDisplay.display(resources, processes);
 								System.out.println("Deadlock detected due to following processes:");
 								for(Process proc: deadLockPath) {
 									System.out.println(proc.getName());
 								}
+								System.out.println("");
 								System.out.println("Closing simulation");
 								System.exit(0);
 							}
@@ -251,7 +253,7 @@ public class program {
 			ArrayList<Process> tempPath = new ArrayList<>();
 			
 			//Following print statements intentionally left commented out. Put them back in for diagnostic information on the deadlock check
-			
+			/*
 			System.out.println("initialized emptyPath, See: " + emptyPath);
 			System.out.println("initialized tempPath, See: " + tempPath);
 			System.out.print("path is currently: " );
@@ -261,7 +263,7 @@ public class program {
 			}
 			
 			System.out.println("current is: " + current.getName());
-			
+			*/
 			if( path.size() > 1 && path.get(0) == current) {
 				return path;
 			}else if((path.size() >= totalProcesses) || (current.getDesiredSize() < 1)) {
@@ -269,8 +271,10 @@ public class program {
 			}
 			path.add(current);
 			for(Resource res: current.getDesired()) {
+				/*
 				System.out.println("resource is: " + res.getName());
 				System.out.println("owner of resource is: " + res.getUser().getName());
+				*/
 				tempPath = checkDeadlock(path, res.getUser(), totalProcesses);
 				if(tempPath.size() > 0 ) {
 					return tempPath;
