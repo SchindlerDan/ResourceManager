@@ -14,6 +14,7 @@ import java.util.Scanner;
  */
 public class program {
 		public static void main(String args[]) {
+			Display display;
 			
 			/**
 			 * scanner for getting user input. User input used to get input file.
@@ -121,6 +122,9 @@ public class program {
 				//read the first simulation line
 				line = br.readLine();
 				
+				display = new Display(resources, processes);
+				display.displayGraph();
+				
 				/**
 				 * this do-while loop is the actual simulation. It continues as long as there are successful operations, 
 				 * a process is using a resource, or a process wants a resource. Ends automatically if there are no
@@ -128,7 +132,7 @@ public class program {
 				 * No more successful operations means we either encountered deadlock or we've reached the end of the
 				 * Simulation file. 
 				 * 
-				 * We know we're in deadlock if there's no successful operations
+				 * We know we're in deadlock if there's no successful operations or if the checkDeadlock method returns an ArrayList of size > 0
 				 */
 				do{
 						
@@ -173,7 +177,6 @@ public class program {
 							totalRequests +=1;
 						
 						
-							//requests.add(new Pair(key, value));
 						}else if(parsedLine[1].equals("releases")) {
 							System.out.println(key.getName() + " releasing " + value.getName());
 							int tmp = key.releaseResource(value);
@@ -183,7 +186,6 @@ public class program {
 								successfulOperations += tmp;
 							}
 							totalReleases += 1;
-							//releases.add(new Pair(key, value));
 						}else {
 							System.out.println("ERROR: Could not parse line: " + line);
 						}
@@ -194,9 +196,8 @@ public class program {
 					totalDesired = 0;
 					
 					/**
-					 * For each process, check and see if you're deadlocked. Then try to use all resources you wanted.
-					 * Then release any resources you couldn't
-					 * release earlier for some reason. 
+					 * Try to use all resources you wanted and then
+					 * check and see if you're deadlocked. 
 					 */
 					for(Process process: processes) {
 						
@@ -216,7 +217,8 @@ public class program {
 									System.out.println(proc.getName());
 								}
 								System.out.println("");
-								System.out.println("Closing simulation");
+								System.out.println("Closing simulation...");
+								Thread.sleep(5000);
 								System.exit(0);
 							}
 						}
@@ -229,6 +231,8 @@ public class program {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
+					display.update(resources, processes);
+					display.displayGraph();
 				}while(((line = br.readLine()) != null) || totalDesired > 0 || totalUsed > 0); 
 				
 			
@@ -237,6 +241,9 @@ public class program {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
